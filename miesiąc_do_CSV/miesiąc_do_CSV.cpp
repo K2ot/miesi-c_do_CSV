@@ -42,41 +42,47 @@ int main()
 	std::cout << "max time: " << maxTime << std::endl;
 	std::cout << "min time: " << minTime << std::endl;
 
+	int x{ 1 };
+	std::cout << "ile plików zrobić: ";
+	std::cin >> x;
+
+		for (size_t i = 0; i < x; i++)
+		{
+
+			int64_t randomMiesiac = randomInt((minTime / 1000), (maxTime / 1000) - 44640);
+
+			//randomMiesiac = 1666159200;
+
+			std::cout << "randomMiesiac: " << randomMiesiac << std::endl;
+
+			std::string csvPath{ R"(../../../Miesiace/)" + tableName + R"(_)" + std::to_string(randomMiesiac) + R"(.csv)" };
+
+			std::ofstream csvFile(csvPath);
+
+			if (!csvFile.is_open())
+			{
+				std::cerr << "Nie można otworzyć pliku CSV: " << csvPath << std::endl;
+				return 0;
+			}
+			else
+			{
+				std::cerr << "Otwarty plik CSV: " << csvPath << std::endl;
+			}
+
+			dbConnector.dataToCSV(tableName, randomMiesiac, csvFile);
 
 
-	int64_t randomMiesiac = randomInt((minTime / 1000), (maxTime / 1000) - 44640);
-
-	randomMiesiac = 1666159200;
-
-	std::cout << "randomMiesiac: " << randomMiesiac << std::endl;
-
-	std::string csvPath{ R"(../../../Miesiace/)" + tableName + R"(_)" + std::to_string(randomMiesiac) + R"(.csv)" };
-
-	std::ofstream csvFile(csvPath);
-
-	if (!csvFile.is_open())
-	{
-		std::cerr << "Nie można otworzyć pliku CSV: " << csvPath << std::endl;
-		return 0;
-	}
-	else
-	{
-		std::cerr << "Otwarty plik CSV: " << csvPath << std::endl;
-	}
-	
-	dbConnector.dataToCSV(tableName ,randomMiesiac, csvFile);
-
-
-	if (csvFile.is_open())
-	{
-		csvFile.close();
-	}
+			if (csvFile.is_open())
+			{
+				csvFile.close();
+			}
+		}
 }
 
 
-	//	SELECT*	FROM nazwa_tabeli	WHERE open_time BETWEEN start_time AND end_time ORDER BY open_time ASC;
+//	SELECT*	FROM nazwa_tabeli	WHERE open_time BETWEEN start_time AND end_time ORDER BY open_time ASC;
 
-		//44 640 minut w miesiącu
+	//44 640 minut w miesiącu
 //	SELECT *	FROM market_data WHERE open_time >= starting_open_time ORDER BY open_time ASC LIMIT 44640;
 
 //	dbConnector.executeQuery
